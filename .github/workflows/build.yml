@@ -1,1 +1,31 @@
-make
+name: CI
+
+on:
+  push:
+    branches: [ release ]
+  pull_request:
+    branches: [ dev, release ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      LUA: 53
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+    - run: pip install pyserial
+      shell: bash
+    - run: sudo apt install srecord
+      shell: bash
+    - name: Build firmware
+      run: make
+      shell: bash
+    - name: Upload luac.cross
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: luac.cross_53_float
+        path: luac.cross
