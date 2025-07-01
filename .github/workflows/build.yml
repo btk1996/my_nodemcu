@@ -8,74 +8,47 @@ on:
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        lua_ver: [51, 53]
-        numbers: ['float']
-        include:
-          - lua_ver: 51
-            numbers: 'integral'  
-          - lua_ver: 53
-            numbers: '64bit'  
     runs-on: ubuntu-latest
-
     env:
-      LUA: ${{ matrix.lua_ver }}
+      LUA: 53
 
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: true
-    - run: pip install pyserial
-      shell: bash
-    - run: sudo apt install srecord
-      shell: bash
-    - name: Build firmware
-      if: matrix.numbers == 'float'
+    
+    - name: Install dependencies
+      run: |
+        pip install pyserial
+        sudo apt install srecord
+        
+    - name: Build firmware (Lua 5.3, float)
       run: make
-      shell: bash
-    - name: Build integral firmware
-      if: ${{ matrix.numbers == 'integral' }}
-      run: |
-        make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL"
-        mv luac.cross.int luac.cross
-      shell: bash
-    - name: Build 64bit firmware
-      if: ${{ matrix.numbers == '64bit' }}
-      run: |
-        make EXTRA_CCFLAGS="-DLUA_NUMBER_64BITS"
-      shell: bash
-    - name: Upload luac.cross as artifact
-      if: ${{ success() }}
+      
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
+        name: luac.cross_53_float
         path: luac.cross
-
-  upload_to_repo:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: bin
-
-    - name: Commit and push artifacts to repository
+        
+    - name: Push binary to repository
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+        # Clone the repository
+        git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo
+        cd repo
         
-        # Создаем ветку для артефактов или используем существующую
-        git checkout -b bin || git checkout artifacts
+        # Configure Git
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
         
-        # Копируем артефакты в папку в репозитории
+        # Switch to bin branch
+        git checkout -b bin || git checkout bin
+        
+        # Copy the built binary
         mkdir -p firmware_builds
-        cp -r bin/* firmware_builds/
+        cp ../luac.cross firmware_builds/luac.cross_53_float
         
+        # Commit and push
         git add firmware_builds/
-        git commit -m "Add latest firmware builds [skip ci]"
+        git commit -m "Update firmware build (Lua 5.3, float) [skip ci]"
         git push origin bin
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
