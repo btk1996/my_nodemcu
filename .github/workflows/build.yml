@@ -23,9 +23,9 @@ jobs:
     - name: Build firmware
       run: make
       shell: bash
-    - name: Upload luac.cross
+    - name: Upload firmware
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
-        name: luac.cross_53_float
-        path: luac.cross
+        name: firmware_53_float.bin
+        path: bin
