@@ -79,7 +79,7 @@
 // LUA_FLASH_STORE defines the default partition size if the NodeMCU partition
 // tool is not used.
 
-//#define LUA_FLASH_STORE                   0x10000
+#define LUA_FLASH_STORE                   0x10000
 
 // By default Lua executes the file init.lua at start up.  The following
 // define allows you to replace this with an alternative startup.  Warning:
@@ -115,7 +115,7 @@
 #define SPIFFS_MAX_OPEN_FILES 4 // maximum number of open files for SPIFFS
 #define FS_OBJ_NAME_LEN 31      // maximum length of a filename
 
-//#define BUILD_FATFS
+#define BUILD_FATFS
 
 
 // The HTTPS stack requires client SSL to be enabled.  The SSL buffer size is
@@ -126,7 +126,7 @@
 // The SHA1 and MD5 function are implemented in the ROM BIOS. The MD2 and SHA2
 // are by firmware code, and can be enabled if you need this functionality.
 
-//#define CLIENT_SSL_ENABLE
+#define CLIENT_SSL_ENABLE
 #define SHA2_ENABLE
 #define SSL_BUFFER_SIZE 4096
 #define SSL_MAX_FRAGMENT_LENGTH_CODE	MBEDTLS_SSL_MAX_FRAG_LEN_4096
@@ -205,7 +205,7 @@
 // It does not support changing speed, have only one bus id = 0, does not support GPIO16
 // and works only in Standard(slow) mode with clock speed around 50kHz.
 
-#define I2C_MASTER_OLD_VERSION
+//#define I2C_MASTER_OLD_VERSION
 
 
 // The following sections are only relevant for those developers who are
