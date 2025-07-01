@@ -14,15 +14,15 @@ jobs:
       with:
         submodules: true
     - run: pip install pyserial
-      shell: bash
+      #shell: bash
     - run: sudo apt install srecord
-      shell: bash
+      #shell: bash
     - name: Build firmware
       run: make
-      shell: bash
+      #shell: bash
     - name: Upload firmware
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
         name: firmware_53_float.bin
-        #path: bin
+        path: bin
