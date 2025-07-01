@@ -69,7 +69,7 @@ jobs:
         set
         "%programfiles%\git\usr\bin\xargs"
         cd msvc
-        "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" /p:Configuration=Release /p:Platform=x64
+        "%programfiles(x86)%\Microsoft Visual Studio\2025\Enterprise\MSBuild\Current\Bin\msbuild.exe" /p:Configuration=Release /p:Platform=x64
         mv luac-cross/x64/Release/luac.cross.exe ..
       shell: cmd
     - name: Upload luac.cross
