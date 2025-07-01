@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  workflow_dispatch:  # Ручной запуск
+
+on:
   push:
     branches: [ release ]
   pull_request:
@@ -269,6 +272,3 @@ jobs:
     - name: all_modules_linked
       run: ./tools/check_docs_module_linkage.sh
       shell: bash
-
-on:
-  workflow_dispatch:  # Разрешает ручной запуск
