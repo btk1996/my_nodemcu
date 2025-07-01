@@ -7,8 +7,6 @@ on:
     branches: [ dev, release ]
 
 jobs:
-
-
   build:
     strategy:
       fail-fast: false
@@ -20,13 +18,13 @@ jobs:
             numbers: 'integral'  
           - lua_ver: 53
             numbers: '64bit'  
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04  # Обновлено с 20.04
 
     env:
       LUA: ${{ matrix.lua_ver }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: true
     - run: pip install pyserial
@@ -50,38 +48,31 @@ jobs:
       shell: bash
     - name: Upload luac.cross
       if: ${{ success() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # Обновлено с v2
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
         path: luac.cross
 
-
   build_luac_cross_win:
-
-    runs-on: windows-2019
-
+    runs-on: windows-2022  # Обновлено с 2019
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: true
     - name: Build luac.cross.exe
       run: |
-        set
-        "%programfiles%\git\usr\bin\xargs"
         cd msvc
-        "%programfiles(x86)%\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\msbuild.exe" /p:Configuration=Release /p:Platform=x64
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" /p:Configuration=Release /p:Platform=x64
         mv luac-cross/x64/Release/luac.cross.exe ..
       shell: cmd
     - name: Upload luac.cross
       if: ${{ success() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # Обновлено с v2
       with:
         name: luac.cross_51_float_win
         path: luac.cross.exe
 
-
   compile_lua:
-
     strategy:
       fail-fast: false
       matrix:
@@ -96,15 +87,15 @@ jobs:
             numbers: '64bit'  
             filter: 'cat'
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04  # Обновлено с 20.04
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - name: Download luac.cross
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3  # Обновлено с v1
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
         path: ./
@@ -116,9 +107,7 @@ jobs:
         find lua_modules lua_examples tests/NTest* -iname "*.lua" | ${{ matrix.filter }} | xargs --delimiter="\n" ./luac.cross -p
       shell: bash
 
-
   compile_lua_win:
-
     strategy:
       fail-fast: false
       matrix:
@@ -126,28 +115,26 @@ jobs:
         numbers: ['float']
         filter: [ 'cat' ]
     needs: build_luac_cross_win
-    runs-on: windows-latest
+    runs-on: windows-2022  # Обновлено с latest
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - name: Download luac.cross
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3  # Обновлено с v1
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}_win
         path: ./
     - name: compile Lua
       run: |
-        PATH="/C/Program\ Files/Git/usr/bin:${PATH}"
+        $env:PATH = "C:\Program Files\Git\usr\bin;$env:PATH"
         find lua_modules lua_examples tests/NTest* -iname "*.lua" | ${{ matrix.filter }} | xargs --delimiter="\n" echo
         find lua_modules lua_examples tests/NTest* -iname "*.lua" | ${{ matrix.filter }} | xargs --delimiter="\n" ./luac.cross -p
       shell: bash
 
-
   NTest:
-
     strategy:
       fail-fast: false
       matrix:
@@ -159,15 +146,15 @@ jobs:
           - lua_ver: 53
             numbers: '64bit'  
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04  # Обновлено с 20.04
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - name: Download luac.cross
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3  # Обновлено с v1
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
         path: ./
@@ -187,24 +174,22 @@ jobs:
         (if grep  " ==>  " log ; then exit 1 ; fi)
       shell: bash
 
-
   NTest_win:
-
     strategy:
       fail-fast: false
       matrix:
         lua_ver: [51]
         numbers: ['float']
     needs: build_luac_cross_win
-    runs-on: windows-latest
+    runs-on: windows-2022  # Обновлено с latest
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - name: Download luac.cross
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3  # Обновлено с v1
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}_win
         path: ./
@@ -222,51 +207,47 @@ jobs:
         (if grep  " ==>  " log ; then exit 1 ; fi)
       shell: bash
 
-
   luacheck:
-
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: 'linux'
-            vm: 'ubuntu-20.04'
+            vm: 'ubuntu-22.04'  # Обновлено с 20.04
           - os: 'windows'
-            vm: 'windows-latest'
-    runs-on: ${{ matrix.vm }} 
+            vm: 'windows-2022'  # Обновлено с latest
+    runs-on: ${{ matrix.vm }}
       
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - run: sudo apt install luarocks
-      if : matrix.os == 'linux'
+      if: matrix.os == 'linux'
       shell: bash
-    - name: get luacheck.exe  # is also done in the travis script but in this action it does not run in bash
-      if : matrix.os == 'windows'
+    - name: get luacheck.exe
+      if: matrix.os == 'windows'
       run: |
         mkdir cache
-        C:msys64\usr\bin\wget.exe --tries=5 --timeout=10 --waitretry=10 --read-timeout=10 --retry-connrefused -O cache/luacheck.exe https://github.com/mpeterv/luacheck/releases/download/0.23.0/luacheck.exe
+        curl -L -o cache/luacheck.exe https://github.com/mpeterv/luacheck/releases/download/0.23.0/luacheck.exe
       shell: cmd
     - name: luacheck
       run: |
-        PATH="/C/Program\ Files/Git/usr/bin:${PATH}"
+        if [[ "${{ matrix.os }}" == "windows" ]]; then
+          PATH="C:\Program Files\Git\usr\bin;$PATH"
+        fi
         ./tools/travis/run-luacheck-${{ matrix.os }}.sh
       shell: bash
 
-
-
   doc_check:
-
     strategy:
       fail-fast: false
-    runs-on: ubuntu-20.04 
+    runs-on: ubuntu-22.04  # Обновлено с 20.04
       
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4  # Обновлено с v2
       with:
         submodules: false
     - name: all_modules_linked
       run: ./tools/check_docs_module_linkage.sh
       shell: bash
-
