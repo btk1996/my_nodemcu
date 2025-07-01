@@ -270,3 +270,5 @@ jobs:
       run: ./tools/check_docs_module_linkage.sh
       shell: bash
 
+on:
+  workflow_dispatch:  # Разрешает ручной запуск
