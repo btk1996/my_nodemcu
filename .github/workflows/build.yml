@@ -26,7 +26,7 @@ jobs:
       LUA: ${{ matrix.lua_ver }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: true
     - run: pip install pyserial
@@ -50,7 +50,7 @@ jobs:
       shell: bash
     - name: Upload luac.cross
       if: ${{ success() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
         path: luac.cross
@@ -61,7 +61,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: true
     - name: Build luac.cross.exe
@@ -74,7 +74,7 @@ jobs:
       shell: cmd
     - name: Upload luac.cross
       if: ${{ success() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: luac.cross_51_float_win
         path: luac.cross.exe
@@ -100,7 +100,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: false
     - name: Download luac.cross
@@ -130,7 +130,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: false
     - name: Download luac.cross
@@ -163,7 +163,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: false
     - name: Download luac.cross
@@ -200,7 +200,7 @@ jobs:
 
     steps:
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: false
     - name: Download luac.cross
@@ -236,7 +236,7 @@ jobs:
     runs-on: ${{ matrix.vm }} 
       
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: false
     - run: sudo apt install luarocks
@@ -263,7 +263,7 @@ jobs:
     runs-on: ubuntu-latest
       
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: false
     - name: all_modules_linked
