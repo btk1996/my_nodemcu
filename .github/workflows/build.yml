@@ -7,8 +7,6 @@ on:
     branches: [ dev, release ]
 
 jobs:
-
-
   build:
     strategy:
       fail-fast: false
@@ -48,9 +46,36 @@ jobs:
       run: |
         make EXTRA_CCFLAGS="-DLUA_NUMBER_64BITS"
       shell: bash
-    - name: Upload luac.cross
+    - name: Upload luac.cross as artifact
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
         name: luac.cross_${{ matrix.lua_ver }}_${{ matrix.numbers }}
         path: luac.cross
+
+  upload_to_repo:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: bin
+
+    - name: Commit and push artifacts to repository
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+        # Создаем ветку для артефактов или используем существующую
+        git checkout -b bin || git checkout artifacts
+        
+        # Копируем артефакты в папку в репозитории
+        mkdir -p firmware_builds
+        cp -r bin/* firmware_builds/
+        
+        git add firmware_builds/
+        git commit -m "Add latest firmware builds [skip ci]"
+        git push origin bin
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
