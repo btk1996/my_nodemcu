@@ -1,27 +1,28 @@
-name: CI
+name: my build
 
 on:
-  push:
-    branches: [ release ]
-  pull_request:
-    branches: [ dev, release ]
+  workflow_dispatch:  # Включает ручной запуск из интерфейса GitHub Actions
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       LUA: 53
+
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: true
     - run: pip install pyserial
+      #shell: bash
     - run: sudo apt install srecord
+      #shell: bash
     - name: Build firmware
       run: make
-    - name: Upload luac.cross
+      #shell: bash
+    - name: Upload firmware
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
-        name: luac.cross_53_float
-        path: luac.cross
+        name: firmware_53_float.bin
+        path: bin
