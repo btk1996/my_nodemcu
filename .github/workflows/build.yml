@@ -43,11 +43,11 @@ jobs:
         make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL"
         mv luac.cross.int luac.cross
       shell: bash
-    - name: Build 64bit firmware
-      if: ${{ matrix.numbers == '64bit' }}
-      run: |
-        make EXTRA_CCFLAGS="-DLUA_NUMBER_64BITS"
-      shell: bash
+    #- name: Build 64bit firmware
+    #  if: ${{ matrix.numbers == '64bit' }}
+    #  run: |
+    #    make EXTRA_CCFLAGS="-DLUA_NUMBER_64BITS"
+    #  shell: bash
     - name: Upload luac.cross
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
