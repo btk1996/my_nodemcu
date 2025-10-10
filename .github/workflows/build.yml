@@ -1,7 +1,7 @@
 name: my build
 
 on:
-  workflow_dispatch:  # Включает ручной запуск из интерфейса GitHub Actions
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,15 +14,12 @@ jobs:
       with:
         submodules: true
     - run: pip install pyserial
-      #shell: bash
     - run: sudo apt install srecord
-      #shell: bash
     - name: Build firmware
       run: make
-      #shell: bash
     - name: Upload firmware
       if: ${{ success() }}
       uses: actions/upload-artifact@v4
       with:
-        name: firmware_53_float.bin
-        path: bin
+        name: firmware_53_float
+        path: bin/**
