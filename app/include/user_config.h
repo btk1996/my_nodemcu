@@ -115,7 +115,7 @@
 #define SPIFFS_MAX_OPEN_FILES 4 // maximum number of open files for SPIFFS
 #define FS_OBJ_NAME_LEN 31      // maximum length of a filename
 
-//#define BUILD_FATFS
+#define BUILD_FATFS
 
 
 // The HTTPS stack requires client SSL to be enabled.  The SSL buffer size is
@@ -126,7 +126,7 @@
 // The SHA1 and MD5 function are implemented in the ROM BIOS. The MD2 and SHA2
 // are by firmware code, and can be enabled if you need this functionality.
 
-//#define CLIENT_SSL_ENABLE
+#define CLIENT_SSL_ENABLE
 #define SHA2_ENABLE
 #define SSL_BUFFER_SIZE 4096
 #define SSL_MAX_FRAGMENT_LENGTH_CODE	MBEDTLS_SSL_MAX_FRAG_LEN_4096
