@@ -46,7 +46,7 @@ jobs:
     - name: Build 64bit firmware
       if: ${{ matrix.numbers == '64bit' }}
       run: |
-        make EXTRA_CCFLAGS="-DLUA_NUMBER_64BITS"
+        make EXTRA_CCFLAGS="-DLUA_NUMBER_INTEGRAL"
       shell: bash
     - name: Upload luac.cross
       if: ${{ success() }}
