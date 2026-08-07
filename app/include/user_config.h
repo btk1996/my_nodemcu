@@ -18,7 +18,7 @@
 // 368640].  Note that the last 3 rates are not recommended as these might be
 // unreliable, but 460800 seems to work well for most USB-serial devices.
 
-#define BIT_RATE_DEFAULT BIT_RATE_115200
+#define BIT_RATE_DEFAULT BIT_RATE_230400
 //#define BIT_RATE_AUTOBAUD
 
 
