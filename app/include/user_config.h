@@ -147,8 +147,8 @@
 // firmware to manage timer rescheduling over sleeps (the CPU clock is
 // suspended so timers get out of sync) then enable the following options
 
-//#define TIMER_SUSPEND_ENABLE
-//#define PMSLEEP_ENABLE
+#define TIMER_SUSPEND_ENABLE
+#define PMSLEEP_ENABLE
 
 // The net module optionally offers net info functionnality. Uncomment the following
 // to enable the functionnality.
