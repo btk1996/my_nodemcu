@@ -88,7 +88,7 @@
 // The example provided executes the LFS module "_init" at startup or fails
 // through to the interactive prompt.
 
-#define LUA_INIT_STRING "pcall(function() node.flashindex'_init'() end)"
+//#define LUA_INIT_STRING "pcall(function() node.flashindex'_init'() end)"
 //#define LUA_INIT_STRING "pcall(node.flashindex('_init'))"
 
 
