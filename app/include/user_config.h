@@ -89,7 +89,7 @@
 // through to the interactive prompt.
 
 //#define LUA_INIT_STRING "pcall(function() node.flashindex'_init'() end)"
-//#define LUA_INIT_STRING "pcall(node.flashindex('_init'))"
+#define LUA_INIT_STRING "pcall(node.flashindex('_init'))"
 
 
 // NodeMCU supports two file systems: SPIFFS and FATFS, the first is available
